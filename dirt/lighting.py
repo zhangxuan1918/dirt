@@ -26,7 +26,7 @@ def _get_face_normals(vertices, faces):
     vertices_ndim = vertices.get_shape().ndims
     vertices_by_index = tf.transpose(vertices, [vertices_ndim - 2] + list(range(vertices_ndim - 2)) + [vertices_ndim - 1])  # indexed by vertex-index, *, x/y/z
     vertices_by_face = tf.gather(vertices_by_index, faces)  # indexed by face-index, vertex-in-face, *, x/y/z
-    normals_by_face = tf.cross(vertices_by_face[:, 1] - vertices_by_face[:, 0], vertices_by_face[:, 2] - vertices_by_face[:, 0])  # indexed by face-index, *, x/y/z
+    normals_by_face = tf.linalg.cross(vertices_by_face[:, 1] - vertices_by_face[:, 0], vertices_by_face[:, 2] - vertices_by_face[:, 0])  # indexed by face-index, *, x/y/z
     normals_by_face /= (tf.norm(normals_by_face, axis=-1, keep_dims=True) + 1.e-12)  # ditto
     return normals_by_face, vertices_by_index
 
