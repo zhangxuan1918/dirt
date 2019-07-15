@@ -27,7 +27,7 @@ def _get_face_normals(vertices, faces):
     vertices_by_index = tf.transpose(vertices, [vertices_ndim - 2] + list(range(vertices_ndim - 2)) + [vertices_ndim - 1])  # indexed by vertex-index, *, x/y/z
     vertices_by_face = tf.gather(vertices_by_index, faces)  # indexed by face-index, vertex-in-face, *, x/y/z
     normals_by_face = tf.linalg.cross(vertices_by_face[:, 1] - vertices_by_face[:, 0], vertices_by_face[:, 2] - vertices_by_face[:, 0])  # indexed by face-index, *, x/y/z
-    normals_by_face /= (tf.norm(normals_by_face, axis=-1, keep_dims=True) + 1.e-12)  # ditto
+    normals_by_face /= (tf.norm(normals_by_face, axis=-1, keepdims=True) + 1.e-12)  # ditto
     return normals_by_face, vertices_by_index
 
 
@@ -277,8 +277,8 @@ def specular_directional(vertex_positions, vertex_normals, vertex_reflectivities
         reflected_directions = -vertices_to_light_direction + 2. * tf.matmul(vertex_normals, vertices_to_light_direction[..., tf.newaxis]) * vertex_normals  # indexed by *, vertex-index, x/y/z
         vertex_to_camera_displacements = camera_position[..., tf.newaxis, :] - vertex_positions  # indexed by *, vertex-index, x/y/z
         cosines = tf.reduce_sum(
-            (vertex_to_camera_displacements / tf.norm(vertex_to_camera_displacements, axis=-1, keep_dims=True) + 1.e-12) * reflected_directions,
-            axis=-1, keep_dims=True
+            (vertex_to_camera_displacements / tf.norm(vertex_to_camera_displacements, axis=-1, keepdims=True) + 1.e-12) * reflected_directions,
+            axis=-1, keepdims=True
         )  # indexed by *, vertex-index, singleton
         if double_sided:
             cosines = tf.abs(cosines)
@@ -333,7 +333,7 @@ def diffuse_point(vertex_positions, vertex_normals, vertex_colors, light_positio
         light_color = tf.convert_to_tensor(light_color, name='light_color')
 
         relative_positions = vertex_positions - light_position[..., tf.newaxis, :]  # indexed by *, vertex-index, x/y/z
-        incident_directions = relative_positions / (tf.norm(relative_positions, axis=-1, keep_dims=True) + 1.e-12)  # ditto
+        incident_directions = relative_positions / (tf.norm(relative_positions, axis=-1, keepdims=True) + 1.e-12)  # ditto
         cosines = tf.reduce_sum(vertex_normals * incident_directions, axis=-1)  # indexed by *, vertex-index
         if double_sided:
             cosines = tf.abs(cosines)
