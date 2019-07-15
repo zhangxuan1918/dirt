@@ -37,10 +37,10 @@ def rasterise(background, vertices, vertex_colors, faces, height=None, width=Non
     """
 
     with ops.name_scope(name, 'Rasterise', [background, vertices, vertex_colors, faces]) as scope:
-        background = tf.convert_to_tensor(background, name='background', dtype=tf.float32)
-        vertices = tf.convert_to_tensor(vertices, name='vertices', dtype=tf.float32)
-        vertex_colors = tf.convert_to_tensor(vertex_colors, name='vertex_colors', dtype=tf.float32)
-        faces = tf.convert_to_tensor(faces, name='faces', dtype=tf.int32)
+        background = tf.convert_to_tensor(value=background, name='background', dtype=tf.float32)
+        vertices = tf.convert_to_tensor(value=vertices, name='vertices', dtype=tf.float32)
+        vertex_colors = tf.convert_to_tensor(value=vertex_colors, name='vertex_colors', dtype=tf.float32)
+        faces = tf.convert_to_tensor(value=faces, name='faces', dtype=tf.int32)
         if height is None:
             height = int(background.get_shape()[0])
         if width is None:
@@ -71,10 +71,10 @@ def rasterise_batch(background, vertices, vertex_colors, faces, height=None, wid
     """
 
     with ops.name_scope(name, 'RasteriseBatch', [background, vertices, vertex_colors, faces]) as scope:
-        background = tf.convert_to_tensor(background, name='background', dtype=tf.float32)
-        vertices = tf.convert_to_tensor(vertices, name='vertices', dtype=tf.float32)
-        vertex_colors = tf.convert_to_tensor(vertex_colors, name='vertex_colors', dtype=tf.float32)
-        faces = tf.convert_to_tensor(faces, name='faces', dtype=tf.int32)
+        background = tf.convert_to_tensor(value=background, name='background', dtype=tf.float32)
+        vertices = tf.convert_to_tensor(value=vertices, name='vertices', dtype=tf.float32)
+        vertex_colors = tf.convert_to_tensor(value=vertex_colors, name='vertex_colors', dtype=tf.float32)
+        faces = tf.convert_to_tensor(value=faces, name='faces', dtype=tf.int32)
         if height is None:
             height = int(background.get_shape()[1])
         if width is None:
@@ -107,4 +107,3 @@ def _rasterise_grad(op, grad_pixels, name=None):
         grad_op_result.grad_vertex_colors,
         None  # wrt faces
     ]
-
