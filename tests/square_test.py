@@ -1,4 +1,3 @@
-
 import numpy as np
 import tensorflow as tf
 import dirt
@@ -38,8 +37,18 @@ def get_dirt_pixels():
 
 def main():
 
-    non_dirt_pixels = get_non_dirt_pixels().numpy()
-    dirt_pixels = get_dirt_pixels().numpy()
+    if '.' in tf.__version__ and int(tf.__version__.split('.')[0]) < 2:
+
+        session = tf.Session()
+        with session.as_default():
+
+            non_dirt_pixels = get_non_dirt_pixels().eval()
+            dirt_pixels = get_dirt_pixels().eval()
+
+    else:
+
+        non_dirt_pixels = get_non_dirt_pixels().numpy()
+        dirt_pixels = get_dirt_pixels().numpy()
 
     if np.all(non_dirt_pixels == dirt_pixels):
         print('successful: all pixels agree')
@@ -49,4 +58,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
